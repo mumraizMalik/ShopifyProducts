@@ -79,4 +79,52 @@ function fetchProductsAdmin() {
       return error;
     });
 }
-// fetchProductsAdmin();
+
+app.get("/addToCart", async (req, res) => {
+  try {
+    const data = req.body.data;
+    console.log("Data", data);
+    const response = await addToCart(data.productId, data.quantity);
+    console.log("Response", response);
+    res.status(200).send(response);
+  } catch (error) {
+    console.error("Error Adding products to cart:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+function addToCart(productId, quantity) {
+  console.log("productId", productId);
+
+  const data = {
+    items: [
+      {
+        id: productId,
+        quantity: quantity,
+      },
+    ],
+  };
+
+  fetch("https://test9112323.myshopify.com/cart/add.js", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      //'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Product added to cart:", data);
+      // Handle success here, like updating the cart UI
+    })
+    .catch((error) => {
+      console.error("Error adding product to cart:", error);
+      // Handle errors here, like showing an error message to the user
+    });
+}
