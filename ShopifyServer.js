@@ -85,7 +85,7 @@ app.post("/addToCart", async (req, res) => {
     const data = req.body.data;
     console.log("Data", data);
     const response = await addToCart(data.productId, data.quantity);
-    console.log("Response", response);
+
     res.status(200).send(response);
   } catch (error) {
     console.error("Error Adding products to cart:", error);
