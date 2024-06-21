@@ -105,7 +105,7 @@ function addToCart(productId, quantity) {
     ],
   };
 
-  fetch("https://test9112323.myshopify.com/cart/add.js", {
+  return fetch("https://test9112323.myshopify.com/cart/add.js", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -119,12 +119,10 @@ function addToCart(productId, quantity) {
       }
       return response.json();
     })
-    .then((data) => {
-      console.log("Product added to cart:", data);
-      // Handle success here, like updating the cart UI
-    })
+
     .catch((error) => {
       console.error("Error adding product to cart:", error);
+      return error;
       // Handle errors here, like showing an error message to the user
     });
 }
