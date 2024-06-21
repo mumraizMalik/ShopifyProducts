@@ -80,7 +80,7 @@ function fetchProductsAdmin() {
     });
 }
 
-app.get("/addToCart", async (req, res) => {
+app.post("/addToCart", async (req, res) => {
   try {
     const data = req.body.data;
     console.log("Data", data);
