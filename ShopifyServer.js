@@ -6,7 +6,7 @@ require("dotenv").config();
 let corsOptions = {
   origin: "https://sfcrod.org",
 };
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
