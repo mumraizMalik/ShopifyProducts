@@ -112,7 +112,7 @@ async function fetchProductsGraphql() {
   const graphQLQuery = {
     query: `
       query {
-        products(first: 10) {
+        products(first: 200) {
           edges {
             node {
               id
