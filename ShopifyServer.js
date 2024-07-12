@@ -25,6 +25,23 @@ app.get("/products", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+app.get("/filterproduct", async (req, res) => {
+  try {
+    const name = req?.query?.name;
+    if (!name) {
+      res.status(400).send({ error: "A word from title is required." });
+      return;
+    }
+
+    const response = await fetchProductsGraphql();
+    const filterData = filterArrayBasedOnSubString(response.products, name);
+    // console.log("Response", response);
+    res.status(200).send(filterData);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 app.post("/addToCart", async (req, res) => {
   try {
     const data = req.body.data;
@@ -40,6 +57,15 @@ app.post("/addToCart", async (req, res) => {
 let server = app.listen(PORT, (req, res) => {
   console.log(`Server is running ${PORT}`);
 });
+const filterArrayBasedOnSubString = (products, input) => {
+  const subString = input.toLowerCase();
+  const newArray = products.filter((item) => {
+    if (item.title.toLowerCase().includes(subString)) {
+      return item;
+    }
+  });
+  return newArray;
+};
 // server.setTimeout(50000000);
 
 // function fetchProductsGraphql() {
