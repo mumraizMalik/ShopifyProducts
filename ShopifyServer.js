@@ -36,7 +36,9 @@ app.get("/filterproduct", async (req, res) => {
     const response = await fetchProductsGraphql();
     const filterData = filterArrayBasedOnSubString(response.products, name);
     // console.log("Response", response);
-    res.status(200).send(filterData);
+    res.status(200).send({
+      products: filterData,
+    });
   } catch (error) {
     console.error("Error fetching products:", error);
     res.status(500).send("Internal Server Error");
