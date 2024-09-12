@@ -154,6 +154,18 @@ async function fetchProductsGraphql() {
                   }
                 }
               }
+              media(first: 1, sortKey: POSITION) {
+            edges {
+              node {
+                ... on Model3d {
+                  id
+                  originalSource {
+                    url
+                  }
+                }
+              }
+            }
+          }
               variants(first: 5) {
                 edges {
                   node {
@@ -196,6 +208,15 @@ async function fetchProductsGraphql() {
 
     const products = jsonResponse.data.products.edges.map((edge) => {
       const productNode = edge.node;
+      // To Map 3D Model
+      const model3D = productNode.media.edges.length > 0
+    ? productNode.media.edges
+        .filter((mediaEdge) => mediaEdge.node.__typename === 'Model3d')  // Only include Model3d media
+        .map((mediaEdge) => ({
+          id: mediaEdge.node.id,
+          url: mediaEdge.node.originalSource.url,
+        }))
+    : null;
       const product = {
         id: productNode.id,
         title: productNode.title,
@@ -219,6 +240,7 @@ async function fetchProductsGraphql() {
             ? variantEdge.node.image.altText
             : null,
         })),
+        model3D: model3D,  // Add the 3D model data to the product
       };
       return product;
     });
